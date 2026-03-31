@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Food - Full Menu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <style>
+        .order-btn {
+            background-color: #ff0000;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .order-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <header style="height: auto; padding-bottom: 20px;">
+        <div id="navbar">
+            <nav role="navigation">
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('menu') }}">Menu</a></li>
+                    <li>
+                        <a href="{{ url_for('view_cart') }}" style="color: #ff0000;">
+                            <i class="fa-solid fa-cart-shopping"></i> Bag 
+                            <span style="background: black; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px;">
+                                {{ session['cart']|length if 'cart' in session else 0 }}
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="menu" style="padding-top: 100px;">
+            <div class="container">
+                <div class="title">
+                    <h2>Our Full Menu</h2>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div id="flash-message" style="background-color: #4CAF50; color: white; padding: 10px; margin-bottom: 20px; text-align: center; border-radius: 5px; font-weight: bold; transition: opacity 0.5s ease;">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        <script>
+                            setTimeout(function() {
+                                var flashMsg = document.getElementById('flash-message');
+                                if (flashMsg) {
+                                    flashMsg.style.opacity = '0';
+                                    setTimeout(function() { flashMsg.style.display = 'none'; }, 500);
+                                }
+                            }, 2000);
+                        </script>
+                    {% endif %}
+                {% endwith %}
+
+                <div class="menu-items">
+                    <div class="menu-items-left">
+                        {% for item in menu_items[:(menu_items|length // 2)] %}
+                        <div class="menu-item">
+                            <img src="{{ url_for('static', filename='img/' + item.image_file) }}" alt="{{ item.name }}">
+                            <div>
+                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span></h3>
+                                <p>{{ item.description }}</p>
+                                <a href="{{ url_for('add_to_cart', item_id=item.id) }}" class="order-btn"><i class="fa-solid fa-plus"></i> Add to Bag</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="menu-items-right">
+                        {% for item in menu_items[(menu_items|length // 2):] %}
+                        <div class="menu-item">
+                            <img src="{{ url_for('static', filename='img/' + item.image_file) }}" alt="{{ item.name }}">
+                            <div>
+                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span></h3>
+                                <p>{{ item.description }}</p>
+                                <a href="{{ url_for('add_to_cart', item_id=item.id) }}" class="order-btn"><i class="fa-solid fa-plus"></i> Add to Bag</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

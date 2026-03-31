@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bag - Food Lover</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='IMG_SEGMENT_20260322_175438.png') }}">
+</head>
+<body style="background-color: #f8f9fa;">
+    <header style="height: auto; padding-bottom: 20px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <div id="navbar">
+            <img src="{{ url_for('static', filename='IMG_SEGMENT_20260322_175438.png') }}" alt="Food Lover Logo" style="width: 70px; border-radius: 50%;">
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}" style="color: #333;">Home</a></li>
+                    <li><a href="{{ url_for('menu') }}" style="color: #333;">Menu</a></li>
+                    <li>
+                        <a href="{{ url_for('view_cart') }}" style="color: #e50000;">
+                            <i class="fa-solid fa-cart-shopping"></i> Bag 
+                            <span style="background: black; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px;">
+                                {{ session['cart']|length if 'cart' in session else 0 }}
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main style="padding: 80px 20px; text-align: center;">
+        <h2 style="color: #333; margin-bottom: 30px;">Your Shopping Bag</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div id="flash-message" style="position: fixed; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 90%; max-width: 500px;">
+                    {% for category, message in messages %}
+                        <div style="background-color: {% if category == 'error' %}#f44336{% else %}#4CAF50{% endif %}; color: white; padding: 15px 20px; margin-bottom: 10px; text-align: center; border-radius: 10px; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: opacity 0.5s ease;">
+                            {% if category == 'success' %}<i class="fa-solid fa-circle-check"></i>{% endif %}
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <script>
+                    setTimeout(function() {
+                        var flashMsg = document.getElementById('flash-message');
+                        if (flashMsg) {
+                            flashMsg.style.opacity = '0';
+                            setTimeout(function() { flashMsg.style.display = 'none'; }, 500);
+                        }
+                    }, 3000);
+                </script>
+            {% endif %}
+        {% endwith %}
+
+        {% if items %}
+            <table style="width: 90%; max-width: 900px; margin: 0 auto; border-collapse: collapse; font-size: 18px; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-radius: 15px; overflow: hidden;">
+                <tr style="background-color: #f4f4f4; border-bottom: 2px solid #eee;">
+                    <th style="padding: 20px; text-align: left; color: #555;">Item Name</th>
+                    <th style="padding: 20px; text-align: center; color: #555;">Price</th>
+                    <th style="padding: 20px; text-align: center; color: #555;">Quantity</th>
+                    <th style="padding: 20px; text-align: center; color: #555;">Subtotal</th>
+                    <th style="padding: 20px; text-align: center; color: #555;">Action</th>
+                </tr>
+                {% for item in items %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 20px; text-align: left; font-weight: bold; color: #333;">{{ item.name }}</td>
+                    <td style="padding: 20px; text-align: center; color: #666;">${{ "%.2f"|format(item.price) }}</td>
+                    <td style="padding: 20px; text-align: center; font-weight: bold; color: #333;">x{{ item.quantity }}</td>
+                    <td style="padding: 20px; text-align: center; color: #e50000; font-weight: bold;">${{ "%.2f"|format(item.subtotal) }}</td>
+                    <td style="padding: 20px; text-align: center;">
+                        <a href="{{ url_for('add_one', item_id=item.id) }}" style="color: #28a745; font-size: 22px; margin: 0 10px; text-decoration: none; transition: transform 0.2s; display: inline-block;" title="Add One">
+                            <i class="fa-solid fa-circle-plus"></i>
+                        </a>
+                        
+                        <a href="{{ url_for('remove_from_cart', item_id=item.id) }}" style="color: #ffc107; font-size: 22px; margin: 0 10px; text-decoration: none; transition: transform 0.2s; display: inline-block;" title="Remove One">
+                            <i class="fa-solid fa-circle-minus"></i>
+                        </a>
+                        
+                        <a href="{{ url_for('remove_all', item_id=item.id) }}" style="color: #e50000; font-size: 22px; margin: 0 10px; text-decoration: none; transition: transform 0.2s; display: inline-block;" title="Remove All">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr style="font-weight: bold; font-size: 24px; background-color: #fffafaa6;">
+                    <td colspan="3" style="padding: 25px; text-align: right; color: #333;">Total Order:</td>
+                    <td colspan="2" style="padding: 25px; text-align: left; color: #e50000; padding-left: 45px;">${{ "%.2f"|format(total) }}</td>
+                </tr>
+            </table>
+            
+            <a href="{{ url_for('checkout') }}" style="background-color: #e50000; color: white; padding: 15px 50px; font-size: 22px; font-weight: bold; border-radius: 30px; text-decoration: none; display: inline-block; margin-top: 40px; box-shadow: 0 4px 10px rgba(229,0,0,0.3); transition: transform 0.2s;">
+                Proceed to Checkout <i class="fa-solid fa-arrow-right" style="margin-left: 10px;"></i>
+            </a>
+            <br><br>
+            <a href="{{ url_for('menu') }}" style="color: #888; text-decoration: none; font-size: 16px;"><i class="fa-solid fa-arrow-left"></i> Back to Menu</a>
+        {% else %}
+            <div style="background: #fff; padding: 50px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 500px; margin: 0 auto;">
+                <i class="fa-solid fa-basket-shopping" style="font-size: 60px; color: #ddd; margin-bottom: 20px;"></i>
+                <p style="font-size: 22px; color: #666; margin-bottom: 20px;">Your bag is empty.</p>
+                <a href="{{ url_for('menu') }}" style="background-color: #333; color: white; padding: 12px 30px; font-size: 18px; font-weight: bold; border-radius: 30px; text-decoration: none; display: inline-block;">Explore our menu</a>
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>

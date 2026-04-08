@@ -10,13 +10,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
         integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='IMG_SEGMENT_20260322_175438.png') }}">
+    <link rel="shortcut icon" type="image/png"
+        href="{{ url_for('static', filename='IMG_SEGMENT_20260322_175438.png') }}">
 </head>
 
 <body>
     <header>
         <div id="navbar">
-            <img src="{{ url_for('static', filename='IMG_SEGMENT_20260322_175438.png') }}" alt="Happy Food Logo" style="width: 70px; border-radius: 50%;">
+            <img src="{{ url_for('static', filename='IMG_SEGMENT_20260322_175438.png') }}" alt="Happy Food Logo"
+                style="width: 70px; border-radius: 50%;">
             <nav role="navigation">
                 <ul>
                     <li><a href="#home">Home</a></li>
@@ -26,8 +28,9 @@
                     <li><a href="#contact">Contact</a></li>
                     <li>
                         <a href="{{ url_for('view_cart') }}" style="color: #ff0000;">
-                            <i class="fa-solid fa-cart-shopping"></i> Bag 
-                            <span style="background: black; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px;">
+                            <i class="fa-solid fa-cart-shopping"></i> Bag
+                            <span
+                                style="background: black; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px;">
                                 {{ session['cart']|length if 'cart' in session else 0 }}
                             </span>
                         </a>
@@ -40,29 +43,32 @@
             <p>Here you can find Most delicacies food in the world</p>
             <a href="#contact" class="btn btn-primary">Book a Table</a>
         </div>
-    </header>ئ
+    </header>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div id="global-flash-message" style="position: fixed; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 90%; max-width: 500px;">
-                {% for category, message in messages %}
-                    <div style="background-color: {% if category == 'error' %}#f44336{% else %}#4CAF50{% endif %}; color: white; padding: 15px 20px; margin-bottom: 10px; text-align: center; border-radius: 10px; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: opacity 0.5s ease;">
-                        {% if category == 'success' %}<i class="fa-solid fa-circle-check"></i>{% endif %}
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-            <script>
-                // سكريبت بيخلي الرسالة تختفي لوحدها بعد 4 ثواني
-                setTimeout(function() {
-                    var flashMsg = document.getElementById('global-flash-message');
-                    if (flashMsg) {
-                        flashMsg.style.opacity = '0';
-                        setTimeout(function() { flashMsg.style.display = 'none'; }, 500);
-                    }
-                }, 4000);
-            </script>
-        {% endif %}
+    {% if messages %}
+    <div id="global-flash-message"
+        style="position: fixed; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 90%; max-width: 500px;">
+        {% for category, message in messages %}
+        <div
+            style="background-color: {% if category == 'error' %}#f44336{% else %}#4CAF50{% endif %}; color: white; padding: 15px 20px; margin-bottom: 10px; text-align: center; border-radius: 10px; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: opacity 0.5s ease;">
+            {% if category == 'success' %}<i class="fa-solid fa-circle-check"></i>{% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        setTimeout(function () {
+            var flashMsg = document.getElementById('global-flash-message');
+            if (flashMsg) {
+                flashMsg.style.opacity = '0';
+                setTimeout(function () { flashMsg.style.display = 'none'; }, 500);
+            }
+        }, 4000);
+    </script>
+    {% endif %}
     {% endwith %}
+
     <main>
         <section id="about">
             <div class="container">
@@ -72,32 +78,29 @@
                 </div>
                 <div class="about-content">
                     <div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, quibusdam saepe natus
-                            numquam dolorum aliquam ducimus molestias tenetur? Quaerat, atque blanditiis. Debitis
-                            voluptatem
-                            sequi quibusdam nihil eveniet obcaecati soluta rem.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat nesciunt aspernatur earum
-                            sequi
-                            consequatur, quasi iste quod nam esse adipisci neque commodi voluptate deserunt architecto
-                            rerum. Blanditiis labore sed sapiente.</p>
+                        <p>Experience excellence in every bite. Our chefs use the finest ingredients to create
+                            unforgettable meals.</p>
+                        <p>We pride ourselves on tradition, quality, and a passion for great food that spans over two
+                            decades.</p>
                         <a href="#" class="btn btn-secondary">LEARN MORE</a>
                     </div>
                     <img src="{{ url_for('static', filename='img/about_img.png') }}" alt="Pizza">
                 </div>
             </div>
         </section>
+
         <section id="offers">
             <div class="container">
                 <div class="title">
                     <h2>Our Special Offers</h2>
-                    <p>More than 25+ years of experience</p>
+                    <p>Exclusive deals for our valued guests</p>
                 </div>
                 <div class="offers-items">
                     <div>
                         <img src="{{ url_for('static', filename='img/offer1.png') }}" alt="Quattro Pasta">
                         <div>
                             <h3>Quattro Pasta</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.</p>
+                            <p>Rich and creamy pasta with four types of cheese.</p>
                             <p><del>$ 55.00</del> <span class="primary-text">$18.00</span></p>
                         </div>
                     </div>
@@ -105,21 +108,22 @@
                         <img src="{{ url_for('static', filename='img/offer2.png') }}" alt="Vegertarian Pasta">
                         <div>
                             <h3>Vegertarian Pasta</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.</p>
+                            <p>Fresh vegetables mixed with our signature sauce.</p>
                             <p><del>$ 55.00</del> <span class="primary-text">$18.00</span></p>
                         </div>
                     </div>
                     <div>
-                        <img src="{{ url_for('static', filename='img/offer3.png') }}" alt="Quattro Pasta">
+                        <img src="{{ url_for('static', filename='img/offer3.png') }}" alt="Gluten-Free Pasta">
                         <div>
                             <h3>Gluten-Free Pasta</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.</p>
+                            <p>Healthy and delicious option for gluten sensitivity.</p>
                             <p><del>$ 55.00</del> <span class="primary-text">$18.00</span></p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
         <section id="menu">
             <div class="container">
                 <div class="title">
@@ -132,7 +136,8 @@
                         <div class="menu-item">
                             <img src="{{ url_for('static', filename='img/' + item.image_file) }}" alt="{{ item.name }}">
                             <div>
-                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span></h3>
+                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span>
+                                </h3>
                                 <p>{{ item.description }}</p>
                             </div>
                         </div>
@@ -143,18 +148,21 @@
                         <div class="menu-item">
                             <img src="{{ url_for('static', filename='img/' + item.image_file) }}" alt="{{ item.name }}">
                             <div>
-                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span></h3>
+                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span>
+                                </h3>
                                 <p>{{ item.description }}</p>
                             </div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
-                <button class="btn btn-third" style="padding: 0; border: none; background: none;">
-                    <a href="{{ url_for('menu') }}" class="btn btn-third" style="color: white; text-decoration: none; display: block; padding: 10px 20px;">EXPLORE FULL MENU</a>
-                </button>
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="{{ url_for('menu') }}" class="btn btn-third"
+                        style="color: white; text-decoration: none; padding: 10px 20px;">EXPLORE FULL MENU</a>
+                </div>
             </div>
         </section>
+
         <section id="daytime">
             <div class="container">
                 <div class="daytime-items">
@@ -181,6 +189,7 @@
                 </div>
             </div>
         </section>
+
         <section id="gallery">
             <div class="container">
                 <h2>Our Food Gallery</h2>
@@ -194,6 +203,7 @@
                 </div>
             </div>
         </section>
+
         <section id="contact">
             <div class="container">
                 <div class="contact-content">
@@ -217,36 +227,17 @@
                         </div>
                     </div>
                     <form action="/contact" method="POST">
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                            {% if messages %}
-                                {% for category, message in messages %}
-                                    <div id="flash-message" style="background-color: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; text-align: center; border-radius: 5px; font-weight: bold; transition: opacity 0.5s ease;">
-                                        {{ message }}
-                                    </div>
-                                {% endfor %}
-                                <script>
-                                    setTimeout(function() {
-                                        var flashMsg = document.getElementById('flash-message');
-                                        if (flashMsg) {
-                                            flashMsg.style.opacity = '0';
-                                            setTimeout(function() {
-                                                flashMsg.style.display = 'none';
-                                            }, 500);
-                                        }
-                                    }, 3000);
-                                </script>
-                            {% endif %}
-                        {% endwith %}
-                        <input type="text" name="name" id="name" placeholder="Full Name" required>
-                        <input type="email" name="email" id="email" placeholder="Email Address" required>
-                        <input type="text" name="subject" id="subject" placeholder="Subject" required>
-                        <textarea name="message" id="message" cols="30" rows="5" placeholder="Message" required></textarea>
+                        <input type="text" name="name" placeholder="Full Name" required>
+                        <input type="email" name="email" placeholder="Email Address" required>
+                        <input type="text" name="subject" placeholder="Subject" required>
+                        <textarea name="message" cols="30" rows="5" placeholder="Message" required></textarea>
                         <button type="submit" class="btn btn-third">SEND MESSAGE</button>
                     </form>
                 </div>
             </div>
         </section>
     </main>
+
     <footer id="footer">
         <p>Copyright &copy; 2026 All rights reserved | made by <b> <a href="https://mofarahat.pythonanywhere.com/ "
                     target="_blank"> Mohammed Farahat</a> </b></p>

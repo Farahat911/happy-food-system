@@ -1,118 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Food - Full Menu</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <style>
-        :root {
-            --primary-red: #ff0000;
-            --gold: #ffb400;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            padding: 20px;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            padding: 15px;
-            background: #fff;
-            border-bottom: 1px dashed #ddd;
-        }
-
-        .menu-item img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #f9f9f9;
-        }
-
-        .item-info {
-            flex: 1;
-        }
-
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .item-header h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            color: #333;
-        }
-
-        .price {
-            color: var(--gold);
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .item-info p {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
         .order-btn {
-            background-color: var(--primary-red);
+            background-color: #ff0000;
             color: white;
-            padding: 6px 15px;
+            padding: 8px 15px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
             text-decoration: none;
-            font-size: 0.8rem;
             display: inline-block;
         }
-
-        .bag-count {
-            background: white;
-            color: black;
-            border-radius: 50%;
-            padding: 2px 7px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-left: 5px;
-        }
-
-        @media (max-width: 480px) {
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .menu-item {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
+        .order-btn:hover {
+            background-color: #cc0000;
         }
     </style>
 </head>
-
-<body style="background-color: #fcfcfc;">
-    <header style="padding: 15px 0; background: #333;">
+<body>
+    <header style="height: auto; padding-bottom: 20px;">
         <div id="navbar">
-            <nav>
-                <ul style="display: flex; justify-content: center; list-style: none; gap: 30px;">
-                    <li><a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a></li>
-                    <li><a href="{{ url_for('menu') }}" style="color: white; text-decoration: none;">Menu</a></li>
+            <nav role="navigation">
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('menu') }}">Menu</a></li>
                     <li>
-                        <a href="{{ url_for('view_cart') }}"
-                            style="color: var(--primary-red); text-decoration: none; font-weight: bold;">
-                            <i class="fa-solid fa-cart-shopping"></i> Bag
-                            <span class="bag-count">{{ session['cart']|length if 'cart' in session else 0 }}</span>
+                        <a href="{{ url_for('view_cart') }}" style="color: #ff0000;">
+                            <i class="fa-solid fa-cart-shopping"></i> Bag 
+                            <span style="background: black; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px;">
+                                {{ session['cart']|length if 'cart' in session else 0 }}
+                            </span>
                         </a>
                     </li>
                 </ul>
@@ -120,40 +45,61 @@
         </div>
     </header>
 
-    <main class="container" style="max-width: 1200px; margin: auto;">
-        <div style="text-align: center; margin: 50px 0;">
-            <h2 style="font-size: 2.5rem; color: #333;">Our Full Menu</h2>
-        </div>
+    <main>
+        <section id="menu" style="padding-top: 100px;">
+            <div class="container">
+                <div class="title">
+                    <h2>Our Full Menu</h2>
+                </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div
-            style="background: #4CAF50; color: white; padding: 15px; text-align: center; border-radius: 8px; margin: 20px;">
-            {{ message }}
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div id="flash-message" style="background-color: #4CAF50; color: white; padding: 10px; margin-bottom: 20px; text-align: center; border-radius: 5px; font-weight: bold; transition: opacity 0.5s ease;">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        <script>
+                            setTimeout(function() {
+                                var flashMsg = document.getElementById('flash-message');
+                                if (flashMsg) {
+                                    flashMsg.style.opacity = '0';
+                                    setTimeout(function() { flashMsg.style.display = 'none'; }, 500);
+                                }
+                            }, 2000);
+                        </script>
+                    {% endif %}
+                {% endwith %}
 
-        <div class="menu-grid">
-            {% for item in menu_items %}
-            <div class="menu-item">
-                <img src="{{ url_for('static', filename='img/' + item.image_file) }}" alt="{{ item.name }}">
-                <div class="item-info">
-                    <div class="item-header">
-                        <h3>{{ item.name }}</h3>
-                        <span class="price">${{ "%.2f"|format(item.price) }}</span>
+                <div class="menu-items">
+                    <div class="menu-items-left">
+                        {% for item in menu_items[:(menu_items|length // 2)] %}
+                        <div class="menu-item">
+                            <img src="{{ url_for('static', filename='img/' + item.image_file) }}" alt="{{ item.name }}">
+                            <div>
+                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span></h3>
+                                <p>{{ item.description }}</p>
+                                <a href="{{ url_for('add_to_cart', item_id=item.id) }}" class="order-btn"><i class="fa-solid fa-plus"></i> Add to Bag</a>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
-                    <p>{{ item.description }}</p>
-                    <a href="{{ url_for('add_to_cart', item_id=item.id) }}" class="order-btn">
-                        <i class="fa-solid fa-plus"></i> Add to Bag
-                    </a>
+                    
+                    <div class="menu-items-right">
+                        {% for item in menu_items[(menu_items|length // 2):] %}
+                        <div class="menu-item">
+                            <img src="{{ url_for('static', filename='img/' + item.image_file) }}" alt="{{ item.name }}">
+                            <div>
+                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span></h3>
+                                <p>{{ item.description }}</p>
+                                <a href="{{ url_for('add_to_cart', item_id=item.id) }}" class="order-btn"><i class="fa-solid fa-plus"></i> Add to Bag</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-            {% endfor %}
-        </div>
+        </section>
     </main>
 </body>
-
 </html>

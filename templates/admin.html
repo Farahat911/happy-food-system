@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Food Lover</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='IMG_SEGMENT_20260322_175438.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='img/IMG_SEGMENT_20260322_175438.png') }}">
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
         .dashboard-container { max-width: 1200px; margin: 0 auto; }
@@ -33,7 +33,7 @@
 <body>
     <div class="dashboard-container">
         <div class="header">
-            <h1 style="margin: 0; font-size: 28px;"><img src="{{ url_for('static', filename='IMG_SEGMENT_20260322_175438.png') }}" style="width: 40px; vertical-align: middle; border-radius: 50%; margin-right: 10px;"> Restaurant Admin Dashboard</h1>
+            <h1 style="margin: 0; font-size: 28px;"><img src="{{ url_for('static', filename='img/IMG_SEGMENT_20260322_175438.png') }}" style="width: 40px; vertical-align: middle; border-radius: 50%; margin-right: 10px;"> Restaurant Admin Dashboard</h1>
             <p style="color: #ccc; margin-top: 10px;">Manage your incoming orders and sales</p>
             <a href="{{ url_for('home') }}" style="color: #e50000; text-decoration: none; font-weight: bold; background: #fff; padding: 8px 15px; border-radius: 20px; display: inline-block; margin-top: 10px;"><i class="fa-solid fa-arrow-left"></i> Back to Website</a>
             <a href="{{ url_for('logout') }}" style="color: #fff; text-decoration: none; font-weight: bold; background: #dc3545; padding: 8px 15px; border-radius: 20px; display: inline-block; margin-top: 10px; margin-left: 10px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>

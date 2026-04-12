@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Food Lover</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='img/IMG_SEGMENT_20260322_175438.png') }}">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .dashboard-container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #111; color: #fff; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #333; border-bottom: 2px solid #e50000; padding-bottom: 10px; margin-top: 40px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; vertical-align: middle; }
+        th { background-color: #f8f9fa; color: #333; font-weight: bold; }
+        tr:hover { background-color: #fdfdfd; }
+        .btn-complete { background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
+        .btn-complete:hover { background-color: #218838; }
+        .badge-paid { background: #28a745; color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+        .order-details { background: #fdfaf2; padding: 10px; border-radius: 8px; font-size: 14px; color: #555; border-left: 3px solid #f39c12; }
+        .edit-price-form { display: flex; gap: 10px; align-items: center; }
+        .edit-price-input { width: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; outline: none; }
+        .btn-edit { background-color: #ffc107; color: #333; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-edit:hover { background-color: #e0a800; }
+        .payment-info-box { background-color: #fcfcfc; border: 1px solid #eee; padding: 10px; border-radius: 8px; font-size: 13px; }
+        .btn-screenshot { background-color: #e50000; color: white; text-decoration: none; padding: 6px 10px; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 5px; }
+        .btn-cancel { background-color: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
+        .btn-cancel:hover { background-color: #c82333; }
+        .action-buttons { display: flex; gap: 10px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1 style="margin: 0; font-size: 28px;"><img src="{{ url_for('static', filename='img/IMG_SEGMENT_20260322_175438.png') }}" style="width: 40px; vertical-align: middle; border-radius: 50%; margin-right: 10px;"> Restaurant Admin Dashboard</h1>
+            <p style="color: #ccc; margin-top: 10px;">Manage your incoming orders and sales</p>
+            <a href="{{ url_for('home') }}" style="color: #e50000; text-decoration: none; font-weight: bold; background: #fff; padding: 8px 15px; border-radius: 20px; display: inline-block; margin-top: 10px;"><i class="fa-solid fa-arrow-left"></i> Back to Website</a>
+            <a href="{{ url_for('logout') }}" style="color: #fff; text-decoration: none; font-weight: bold; background: #dc3545; padding: 8px 15px; border-radius: 20px; display: inline-block; margin-top: 10px; margin-left: 10px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div style="background-color: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; text-align: center; border-radius: 10px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        <i class="fa-solid fa-circle-check"></i> {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <h2><i class="fa-solid fa-utensils" style="color: #007bff;"></i> Menu Management</h2>
+        
+        <div style="background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;">
+            <h3 style="margin-top: 0; color: #555;">Add New Menu Item</h3>
+            <form action="{{ url_for('add_item') }}" method="POST" enctype="multipart/form-data" style="display: flex; flex-wrap: wrap; gap: 15px;">
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="font-weight: bold; color: #555; display: block; margin-bottom: 8px;">Item Name:</label>
+                    <input type="text" name="name" required placeholder="Ex: Crispy Chicken" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; outline: none; box-sizing: border-box;">
+                </div>
+                <div style="flex: 2; min-width: 250px;">
+                    <label style="font-weight: bold; color: #555; display: block; margin-bottom: 8px;">Description:</label>
+                    <input type="text" name="description" required placeholder="Ex: Delicious crispy chicken" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; outline: none; box-sizing: border-box;">
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                    <label style="font-weight: bold; color: #555; display: block; margin-bottom: 8px;">Price ($):</label>
+                    <input type="number" step="0.01" name="price" required placeholder="Ex: 15.50" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; outline: none; box-sizing: border-box;">
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <label style="font-weight: bold; color: #555; display: block; margin-bottom: 8px;">Upload Image:</label>
+                    <input type="file" name="image_file" accept="image/*" required style="width: 100%; padding: 9px; border: 1px solid #ccc; border-radius: 8px; outline: none; box-sizing: border-box; background: #fff;">
+                </div>
+                <div style="width: 100%; margin-top: 10px;">
+                    <button type="submit" style="background-color: #007bff; color: white; padding: 15px 20px; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.3s; width: 100%;">
+                        <i class="fa-solid fa-upload"></i> Upload & Add Item
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {% if menu_items %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Item Name</th>
+                <th>Current Price</th>
+                <th>Update Price</th>
+                <th>Action</th> </tr>
+            {% for item in menu_items %}
+            <tr>
+                <td style="color: #888; font-weight: bold;">#{{ item.id }}</td>
+                <td><strong>{{ item.name }}</strong></td>
+                <td style="color: #e50000; font-weight: bold;">${{ "%.2f"|format(item.price) }}</td>
+                <td>
+                    <form action="{{ url_for('edit_price', item_id=item.id) }}" method="POST" class="edit-price-form">
+                        <input type="number" step="0.01" name="new_price" required placeholder="New $" class="edit-price-input" value="{{ item.price }}">
+                        <button type="submit" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i> Update</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{{ url_for('delete_item', item_id=item.id) }}" method="POST">
+                        <button type="submit" class="btn-cancel" onclick="return confirm('Are you sure you want to delete this item?');" style="padding: 8px 12px;"><i class="fa-solid fa-trash-can"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        <h2><i class="fa-solid fa-bell" style="color: #e50000;"></i> New Orders (Pending)</h2>
+        {% if pending_orders %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Customer Info</th>
+                <th>Address</th>
+                <th>Order Details</th>
+                <th>Total Price</th>
+                <th>Payment Info</th>
+                <th>Action</th>
+            </tr>
+            {% for order in pending_orders %}
+            <tr>
+                <td style="font-weight: bold; color: #666;">#{{ order.id }}</td>
+                <td>
+                    <strong>{{ order.customer_name }}</strong><br>
+                    <i class="fa-solid fa-phone" style="font-size: 12px; color: #888;"></i> {{ order.phone }}
+                </td>
+                <td>{{ order.address }}</td>
+                <td><div class="order-details">{{ order.order_details }}</div></td>
+                <td style="color: #e50000; font-weight: bold; font-size: 18px;">${{ "%.2f"|format(order.total_price) }}</td>
+                
+                <td>
+                    {% if order.payment_method == 'online' %}
+                        <div class="payment-info-box">
+                            <i class="fa-solid fa-wallet" style="color: #e50000;"></i> <strong>Online</strong><br>
+                            From: {{ order.sender_phone_number }}<br>
+                            <a href="{{ url_for('static', filename='uploads/' + order.transaction_screenshot) }}" target="_blank" class="btn-screenshot">
+                                <i class="fa-solid fa-file-invoice"></i> View Screenshot
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="payment-info-box">
+                            <i class="fa-solid fa-money-bill-wave" style="color: #28a745;"></i> <strong>Cash (COD)</strong>
+                        </div>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <div class="action-buttons">
+                        <form action="{{ url_for('complete_order', order_id=order.id) }}" method="POST">
+                            <button type="submit" class="btn-complete"><i class="fa-solid fa-check"></i> Mark as Paid</button>
+                        </form>
+                        <form action="{{ url_for('delete_order', order_id=order.id) }}" method="POST">
+                            <button type="submit" class="btn-cancel" onclick="return confirm('Are you sure you want to cancel this order?');"><i class="fa-solid fa-xmark"></i> Cancel</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div style="background: #fff; padding: 30px; text-align: center; border-radius: 10px; color: #888;">
+            <i class="fa-solid fa-clipboard-list" style="font-size: 40px; color: #ddd; margin-bottom: 10px;"></i>
+            <p>No new orders at the moment. Waiting for customers!</p>
+        </div>
+        {% endif %}
+
+        <h2><i class="fa-solid fa-vault" style="color: #28a745;"></i> Paid Orders (Archive)</h2>
+        {% if paid_orders %}
+        <table>
+            <tr>
+                <th>Original ID</th>
+                <th>Customer Name</th>
+                <th>Order Details</th>
+                <th>Total Received</th>
+                <th>Status</th>
+            </tr>
+            {% for p_order in paid_orders %}
+            <tr>
+                <td style="color: #888;">#{{ p_order.original_order_id }}</td>
+                <td><strong>{{ p_order.customer_name }}</strong></td>
+                <td><div class="order-details" style="border-left-color: #28a745;">{{ p_order.order_details }}</div></td>
+                <td style="color: #28a745; font-weight: bold; font-size: 16px;">${{ "%.2f"|format(p_order.total_price) }}</td>
+                <td><span class="badge-paid"><i class="fa-solid fa-check-double"></i> Delivered</span></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div style="background: #fff; padding: 30px; text-align: center; border-radius: 10px; color: #888;">
+            <p>Archive is empty.</p>
+        </div>
+        {% endif %}
+        <h2><i class="fa-solid fa-envelope" style="color: #17a2b8;"></i> Customer Messages</h2>
+        {% if contact_messages %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Message Details</th>
+                <th>Action</th>
+            </tr>
+            {% for msg in contact_messages %}
+            <tr>
+                <td style="color: #888; font-weight: bold;">#{{ msg.id }}</td>
+                <td><strong>{{ msg.name }}</strong></td>
+                <td><a href="mailto:{{ msg.email }}" style="color: #007bff; text-decoration: none;"><i class="fa-solid fa-reply"></i> {{ msg.email }}</a></td>
+                <td><strong>{{ msg.subject }}</strong></td>
+                <td><div class="order-details" style="border-left-color: #17a2b8;">{{ msg.message }}</div></td>
+                <td>
+                    <form action="{{ url_for('delete_message', msg_id=msg.id) }}" method="POST">
+                        <button type="submit" class="btn-cancel" onclick="return confirm('Are you sure you want to delete this message?');" style="padding: 8px 12px;"><i class="fa-solid fa-trash-can"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div style="background: #fff; padding: 30px; text-align: center; border-radius: 10px; color: #888;">
+            <i class="fa-solid fa-envelope-open-text" style="font-size: 40px; color: #ddd; margin-bottom: 10px;"></i>
+            <p>No new messages from customers.</p>
+        </div>
+        {% endif %}
+        
+    </div>
+</body>
+</html>

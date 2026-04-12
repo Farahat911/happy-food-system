@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Food</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+        integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='img/IMG_SEGMENT_20260322_175438.png') }}">
+</head>
+
+<body>
+    <header>
+        <div id="navbar">
+            <img src="{{ url_for('static', filename='img/IMG_SEGMENT_20260322_175438.png') }}" alt="Happy Food Logo" style="width: 70px; border-radius: 50%;">
+            <nav role="navigation">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li>
+                        <a href="{{ url_for('view_cart') }}" style="color: #ff0000;">
+                            <i class="fa-solid fa-cart-shopping"></i> Bag 
+                            <span style="background: black; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px;">
+                                {{ session['cart']|length if 'cart' in session else 0 }}
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="content">
+            <h1>Welcome To <span class="primary-text"> Food Lover </span> Restaurant</h1>
+            <p>Here you can find Most delicacies food in the world</p>
+            <a href="#contact" class="btn btn-primary">Book a Table</a>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="global-flash-message" style="position: fixed; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 90%; max-width: 500px;">
+                {% for category, message in messages %}
+                    <div style="background-color: {% if category == 'error' %}#f44336{% else %}#4CAF50{% endif %}; color: white; padding: 15px 20px; margin-bottom: 10px; text-align: center; border-radius: 10px; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: opacity 0.5s ease;">
+                        {% if category == 'success' %}<i class="fa-solid fa-circle-check"></i>{% endif %}
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            <script>
+                // سكريبت بيخلي الرسالة تختفي لوحدها بعد 4 ثواني
+                setTimeout(function() {
+                    var flashMsg = document.getElementById('global-flash-message');
+                    if (flashMsg) {
+                        flashMsg.style.opacity = '0';
+                        setTimeout(function() { flashMsg.style.display = 'none'; }, 500);
+                    }
+                }, 4000);
+            </script>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        <section id="about">
+            <div class="container">
+                <div class="title">
+                    <h2>The Food Lover history</h2>
+                    <p>More than 25+ years of experience</p>
+                </div>
+                <div class="about-content">
+                    <div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, quibusdam saepe natus numquam dolorum aliquam ducimus molestias tenetur? Quaerat, atque blanditiis. Debitis voluptatem sequi quibusdam nihil eveniet obcaecati soluta rem.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat nesciunt aspernatur earum sequi consequatur, quasi iste quod nam esse adipisci neque commodi voluptate deserunt architecto rerum. Blanditiis labore sed sapiente.</p>
+                        <a href="#" class="btn btn-secondary">LEARN MORE</a>
+                    </div>
+                    <img src="{{ url_for('static', filename='img/about_img.png') }}" alt="Pizza">
+                </div>
+            </div>
+        </section>
+
+        <section id="offers">
+            <div class="container">
+                <div class="title">
+                    <h2>Our Special Offers</h2>
+                    <p>More than 25+ years of experience</p>
+                </div>
+                <div class="offers-items">
+                    <div>
+                        <img src="{{ url_for('static', filename='img/offer1.png') }}" alt="Quattro Pasta">
+                        <div>
+                            <h3>Quattro Pasta</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.</p>
+                            <p><del>$ 55.00</del> <span class="primary-text">$18.00</span></p>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='img/offer2.png') }}" alt="Vegertarian Pasta">
+                        <div>
+                            <h3>Vegertarian Pasta</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.</p>
+                            <p><del>$ 55.00</del> <span class="primary-text">$18.00</span></p>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='img/offer3.png') }}" alt="Gluten-Free Pasta">
+                        <div>
+                            <h3>Gluten-Free Pasta</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.</p>
+                            <p><del>$ 55.00</del> <span class="primary-text">$18.00</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="menu">
+            <div class="container">
+                <div class="title">
+                    <h2>Our Special Menu</h2>
+                    <p>Order two and get third for free</p>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-items-left">
+                        {% for item in menu_items[:3] %}
+                        <div class="menu-item">
+                            <img src="{{ url_for('static', filename='img/' + item.image_file) }}" alt="{{ item.name }}">
+                            <div>
+                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span></h3>
+                                <p>{{ item.description }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="menu-items-right">
+                        {% for item in menu_items[3:6] %}
+                        <div class="menu-item">
+                            <img src="{{ url_for('static', filename='img/' + item.image_file) }}" alt="{{ item.name }}">
+                            <div>
+                                <h3>{{ item.name }} <span class="primary-text">${{ "%.2f"|format(item.price) }}</span></h3>
+                                <p>{{ item.description }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <button class="btn btn-third" style="padding: 0; border: none; background: none;">
+                    <a href="{{ url_for('menu') }}" class="btn btn-third" style="color: white; text-decoration: none; display: block; padding: 10px 20px;">EXPLORE FULL MENU</a>
+                </button>
+            </div>
+        </section>
+
+        <section id="daytime">
+            <div class="container">
+                <div class="daytime-items">
+                    <div class="daytime-item">
+                        <img src="{{ url_for('static', filename='img/breckfastIcon.png') }}" alt="Breakfast">
+                        <h3>Breakfast</h3>
+                        <p>8:00 am to 10:00 am</p>
+                    </div>
+                    <div class="daytime-item">
+                        <img src="{{ url_for('static', filename='img/lunchIcon.png') }}" alt="Lunch">
+                        <h3>Lunch</h3>
+                        <p>4:00 pm to 7:00 pm</p>
+                    </div>
+                    <div class="daytime-item">
+                        <img src="{{ url_for('static', filename='img/dinnerIcon.png') }}" alt="Dinner">
+                        <h3>Dinner</h3>
+                        <p>9:00 pm to 1:00 Am</p>
+                    </div>
+                    <div class="daytime-item">
+                        <img src="{{ url_for('static', filename='img/dessertIcon.png') }}" alt="Dessert">
+                        <h3>Dessert</h3>
+                        <p>All day</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery">
+            <div class="container">
+                <h2>Our Food Gallery</h2>
+                <div class="img-gallery">
+                    <img src="{{ url_for('static', filename='img/gallery1.jpeg') }}" alt="gallery1">
+                    <img src="{{ url_for('static', filename='img/gallery2.jpeg') }}" alt="gallery2">
+                    <img src="{{ url_for('static', filename='img/gallery3.jpeg') }}" alt="gallery3">
+                    <img src="{{ url_for('static', filename='img/gallery4.jpeg') }}" alt="gallery4">
+                    <img src="{{ url_for('static', filename='img/gallery5.jpeg') }}" alt="gallery5">
+                    <img src="{{ url_for('static', filename='img/gallery6.jpeg') }}" alt="gallery6">
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div>
+                            <h3>ADDRESS</h3>
+                            <p><i class="fa-solid fa-location-dot"></i> MNU, Gamsa city, Egypt</p>
+                            <p><i class="fa-solid fa-phone"></i> Phone: 01002561404</p>
+                            <p><i class="fa-regular fa-envelope"></i> support@happyfood.com</p>
+                        </div>
+                        <div>
+                            <h3>WORKING HOURS</h3>
+                            <p>8:00 am to 11:00 pm on Weekdays</p>
+                            <p>11:00 am to 1:00 Am on Weekends</p>
+                        </div>
+                        <div>
+                            <h3>FOLLOW US</h3>
+                            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <form action="/contact" method="POST">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div id="flash-message" style="background-color: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; text-align: center; border-radius: 5px; font-weight: bold; transition: opacity 0.5s ease;">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                                <script>
+                                    setTimeout(function() {
+                                        var flashMsg = document.getElementById('flash-message');
+                                        if (flashMsg) {
+                                            flashMsg.style.opacity = '0';
+                                            setTimeout(function() {
+                                                flashMsg.style.display = 'none';
+                                            }, 500);
+                                        }
+                                    }, 3000);
+                                </script>
+                            {% endif %}
+                        {% endwith %}
+                        <input type="text" name="name" id="name" placeholder="Full Name" required>
+                        <input type="email" name="email" id="email" placeholder="Email Address" required>
+                        <input type="text" name="subject" id="subject" placeholder="Subject" required>
+                        <textarea name="message" id="message" cols="30" rows="5" placeholder="Message" required></textarea>
+                        <button type="submit" class="btn btn-third">SEND MESSAGE</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <p>Copyright &copy; 2026 All rights reserved | made by <b> <a href="https://mofarahat.pythonanywhere.com/"
+                    target="_blank"> Mohammed Farahat</a> </b></p>
+    </footer>
+</body>
+
+</html>

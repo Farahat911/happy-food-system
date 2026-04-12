@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Food Lover</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='img/IMG_SEGMENT_20260322_175438.png') }}">
+    
+    <style>
+        .input-wrapper {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .custom-input {
+            width: 85% !important;
+            max-width: 350px;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 30px;
+            font-size: 16px;
+            background-color: #fafafa;
+            text-align: center !important;
+            outline: none;
+            box-sizing: border-box;
+            display: inline-block;
+            margin: 0 auto;
+            transition: border-color 0.3s;
+        }
+        .custom-input:focus {
+            border-color: #e50000;
+        }
+        .custom-input::placeholder {
+            color: #aaa !important;
+        }
+        
+        .payment-cards-grid {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 85%;
+            max-width: 400px;
+            margin: 0 auto 20px auto;
+        }
+        .payment-card-label {
+            flex: 1;
+            cursor: pointer;
+        }
+        .payment-card-label input[type="radio"] {
+            display: none;
+        }
+        .card-content {
+            border: 2px solid #eee;
+            border-radius: 15px;
+            padding: 20px 10px;
+            background-color: #fafafa;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+        .card-content i {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 10px;
+            color: #888;
+        }
+        .payment-card-label input[type="radio"]:checked + .card-content {
+            border-color: #e50000;
+            background-color: #fff5f5;
+            color: #e50000;
+        }
+        .payment-card-label input[type="radio"]:checked + .card-content i {
+            color: #e50000;
+        }
+
+        #online-payment-details {
+            display: none;
+            width: 85%;
+            max-width: 350px;
+            margin: 0 auto;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .clean-info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #e50000;
+            color: #444;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: left;
+            line-height: 1.5;
+        }
+        
+        .custom-file-upload {
+            display: inline-block;
+            padding: 12px 20px;
+            cursor: pointer;
+            background-color: #fff;
+            border: 2px dashed #ccc;
+            border-radius: 15px;
+            color: #555;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .custom-file-upload:hover {
+            border-color: #e50000;
+            color: #e50000;
+            background-color: #fff5f5;
+        }
+    </style>
+</head>
+<body style="background-color: #f8f9fa;">
+    
+    <header style="height: auto; padding-bottom: 20px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <div id="navbar">
+            <img src="{{ url_for('static', filename='img/IMG_SEGMENT_20260322_175438.png') }}" alt="Food Lover Logo" style="width: 70px; border-radius: 50%;">
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}" style="color: #333;">Home</a></li>
+                    <li><a href="{{ url_for('menu') }}" style="color: #333;">Menu</a></li>
+                    <li>
+                        <a href="{{ url_for('view_cart') }}" style="color: #e50000;">
+                            <i class="fa-solid fa-cart-shopping"></i> Bag 
+                            <span style="background: black; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px;">
+                                {{ session['cart']|length if 'cart' in session else 0 }}
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main style="padding: 50px 20px; display: flex; justify-content: center; align-items: center; min-height: 60vh;">
+        <div style="background: white; padding: 40px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px;">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #333;"><i class="fa-solid fa-motorcycle" style="color: #e50000;"></i> Checkout</h2>
+            
+            <form action="{{ url_for('checkout') }}" method="POST" enctype="multipart/form-data" style="width: 100%; text-align: center;">
+                
+                <div class="input-wrapper">
+                    <label for="name" style="font-weight: bold; color: #555; display: block; margin-bottom: 8px;">Full Name:</label>
+                    <input type="text" id="name" name="name" required placeholder="Ex: Mohammed Farahat" class="custom-input">
+                </div>
+                
+                <div class="input-wrapper">
+                    <label for="phone" style="font-weight: bold; color: #555; display: block; margin-bottom: 8px;">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="Ex: 01012345678" class="custom-input">
+                </div>
+                
+                <div class="input-wrapper">
+                    <label for="address" style="font-weight: bold; color: #555; display: block; margin-bottom: 8px;">Delivery Address:</label>
+                    <textarea id="address" name="address" rows="3" required placeholder="City, Street, Building, Apartment" class="custom-input" style="border-radius: 20px; resize: none;"></textarea>
+                </div>
+
+                <div class="input-wrapper">
+                    <label style="font-weight: bold; color: #555; display: block; margin-bottom: 15px;">Payment Method:</label>
+                    
+                    <div class="payment-cards-grid">
+                        <label class="payment-card-label">
+                            <input type="radio" id="cod" name="payment_method" value="cod" checked>
+                            <div class="card-content">
+                                <i class="fa-solid fa-money-bill-1-wave"></i>
+                                <span style="font-weight: bold; font-size: 14px;">Cash</span>
+                            </div>
+                        </label>
+                        
+                        <label class="payment-card-label">
+                            <input type="radio" id="online" name="payment_method" value="online">
+                            <div class="card-content">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                                <span style="font-weight: bold; font-size: 14px;">Online</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div id="online-payment-details">
+                        <div class="clean-info-box">
+                            Transfer <strong style="color: #e50000; font-size: 16px;">${{ total_price }}</strong> to: <br>
+                            <strong style="color: #111; font-size: 18px; display: block; margin: 8px 0;">+201002561404</strong>
+                            Upload the receipt screenshot below.
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="transaction_screenshot" class="custom-file-upload">
+                                <i class="fa-solid fa-cloud-arrow-up" style="margin-right: 8px;"></i> Upload Screenshot
+                            </label>
+                            <input type="file" id="transaction_screenshot" name="transaction_screenshot" accept="image/*" style="display: none;">
+                            <div id="file-name-display" style="margin-top: 8px; font-size: 13px; color: #28a745; font-weight: bold;"></div>
+                        </div>
+
+                        <div style="margin-bottom: 10px;">
+                            <input type="tel" id="sender_phone_number" name="sender_phone_number" placeholder="Transferred From: 01x..." class="custom-input">
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" style="background-color: #e50000; color: white; padding: 15px; font-size: 20px; font-weight: bold; border: none; border-radius: 30px; cursor: pointer; margin-top: 10px; width: 85%; max-width: 350px; box-shadow: 0 4px 10px rgba(229,0,0,0.3); transition: transform 0.2s; display: inline-block;">
+                    Confirm Order
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 25px;">
+                <a href="{{ url_for('view_cart') }}" style="color: #888; text-decoration: none; font-size: 14px;"><i class="fa-solid fa-arrow-left"></i> Back to Bag</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const codRadio = document.getElementById('cod');
+        const onlineRadio = document.getElementById('online');
+        const onlineDetails = document.getElementById('online-payment-details');
+        const fileInput = document.getElementById('transaction_screenshot');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const senderPhoneInput = document.getElementById('sender_phone_number');
+
+        function toggleOnlineDetails() {
+            if (onlineRadio.checked) {
+                onlineDetails.style.display = 'block';
+                fileInput.setAttribute('required', '');
+                senderPhoneInput.setAttribute('required', '');
+            } else {
+                onlineDetails.style.display = 'none';
+                fileInput.removeAttribute('required');
+                senderPhoneInput.removeAttribute('required');
+            }
+        }
+
+        codRadio.addEventListener('change', toggleOnlineDetails);
+        onlineRadio.addEventListener('change', toggleOnlineDetails);
+
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.innerHTML = '<i class="fa-solid fa-check"></i> ' + this.files[0].name;
+            } else {
+                fileNameDisplay.innerHTML = '';
+            }
+        });
+
+        toggleOnlineDetails();
+    </script>
+
+</body>
+</html>

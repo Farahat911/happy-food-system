@@ -1,6 +1,6 @@
-# happy-food-system
-A comprehensive restaurant system featuring an interactive menu, a shopping cart, and a dual payment system (Online &amp; COD). It includes a dedicated admin panel to manage product prices and images, add new items, and moderate user reviews.
 # Happy Food System 🍔🍕
+
+A comprehensive restaurant system featuring an interactive menu, a shopping cart, and a dual payment system (Online & COD). It includes a dedicated admin panel to manage product prices and images, add new items, and moderate user reviews.
 
 ## 📖 Overview
 Happy Food System is a comprehensive and user-friendly Restaurant Management Web Application. It is designed to streamline the ordering process for customers while providing restaurant administrators with a robust dashboard to manage menus, orders, and daily operations efficiently.
@@ -33,3 +33,8 @@ Make sure you have Python 3.x installed on your machine.
    ```bash
    git clone [https://github.com/your-username/happy-food-system.git](https://github.com/your-username/happy-food-system.git)
    cd happy-food-system
+
+### Team members :
+* Mohammed Farahat
+* Ganna Ragab
+* menna elnaghi
